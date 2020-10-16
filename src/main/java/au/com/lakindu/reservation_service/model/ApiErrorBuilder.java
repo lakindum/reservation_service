@@ -24,7 +24,7 @@ public class ApiErrorBuilder {
             .details(buildErrorDetails(exception, exception.getApiErrorStatus())).build();
     }
 
-    public static List<ApiErrorDetails> buildErrorDetails(Exception exception, ApiErrorStatus apiErrorStatus) {
+    private static List<ApiErrorDetails> buildErrorDetails(Exception exception, ApiErrorStatus apiErrorStatus) {
         if (exception instanceof MethodArgumentNotValidException) {
             return buildErrorDetails((MethodArgumentNotValidException) exception);
         } else if (exception instanceof ReservationException) {
@@ -33,17 +33,17 @@ public class ApiErrorBuilder {
         return buildErrorDetails(apiErrorStatus);
     }
 
-    public static List<ApiErrorDetails> buildErrorDetails(ApiErrorStatus apiErrorStatus) {
+    private static List<ApiErrorDetails> buildErrorDetails(ApiErrorStatus apiErrorStatus) {
         return Collections.singletonList(ApiErrorDetails.builder()
                 .issue(apiErrorStatus.getIssue()).build());
     }
 
-    public static List<ApiErrorDetails> buildErrorDetails(ReservationException exception) {
+    private static List<ApiErrorDetails> buildErrorDetails(ReservationException exception) {
         return Collections.singletonList(ApiErrorDetails.builder()
             .issue(exception.getMessage()).build());
     }
 
-    public static List<ApiErrorDetails> buildErrorDetails(MethodArgumentNotValidException exception) {
+    private static List<ApiErrorDetails> buildErrorDetails(MethodArgumentNotValidException exception) {
         return exception.getBindingResult().getFieldErrors().stream()
             .map(constraintViolation -> ApiErrorDetails.builder()
             .field(constraintViolation.getField())

@@ -5,8 +5,6 @@ import au.com.lakindu.reservation_service.entity.RestaurantTable;
 import au.com.lakindu.reservation_service.entity.Timeslot;
 import au.com.lakindu.reservation_service.model.ReservationRequest;
 import au.com.lakindu.reservation_service.model.ReservationResponse;
-import au.com.lakindu.reservation_service.repository.RestaurantTableRepository;
-import au.com.lakindu.reservation_service.repository.TimeslotRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,15 +12,6 @@ import java.util.List;
 
 @Component
 public class ReservationMapper {
-
-    RestaurantTableRepository restaurantTableRepository;
-    TimeslotRepository timeslotRepository;
-
-    public ReservationMapper(RestaurantTableRepository restaurantTableRepository,
-                             TimeslotRepository timeslotRepository) {
-        this.restaurantTableRepository = restaurantTableRepository;
-        this.timeslotRepository = timeslotRepository;
-    }
 
     public Reservation getReservation(int id, ReservationRequest reservationRequest, RestaurantTable restaurantTable,
                                       Timeslot timeslot) {
@@ -42,11 +31,9 @@ public class ReservationMapper {
             .timeslot(timeslot).build();
     }
 
-    public List<ReservationResponse> getReservationResponse(List<Reservation> reservations) {
+    public List<ReservationResponse> getReservationResponseList(List<Reservation> reservations) {
         List<ReservationResponse> reservationResponseList = new ArrayList<>();
-        reservations.forEach(reservation -> {
-            reservationResponseList.add(getReservationResponse(reservation));
-        });
+        reservations.forEach(reservation -> reservationResponseList.add(getReservationResponse(reservation)));
         return reservationResponseList;
     }
 
