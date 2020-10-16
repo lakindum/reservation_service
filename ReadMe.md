@@ -32,6 +32,8 @@ reservation from the database assuming that's what's expected here as per the ta
 
 ### Tests
 
+* ./gradlew test should run all austomated tests available in the project.
+
 * I have added a considerable amount of unit tests to this project, but I think it can still be improved.
   It would be good if we can have some black box tests (with Rest Assured), component tests and integration tests 
   in addition to the unit tests I have added, but to add them it needs a bit of more time.
