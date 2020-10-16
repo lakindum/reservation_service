@@ -28,6 +28,12 @@ reservation from the database assuming that's what's expected here as per the ta
   I think we don't need this since the id of the existing resource is available as a path parameter, and I think
   we should not allow it to update the id of a reservation.
 
+* For the purpose of the test I have only used the default Spring profile, so if this needs to be used in 
+  different environments then we will need to introduce few more Spring profiles for them.
+  ex: application-test.yaml, application-dev.yaml, application-prod.yaml etc
+  
+* I will add in a swagger for the API definitions soon.
+
 * I have done minor modifications to some of the service endpoints in the task description to keep a pattern of it
 
 ### Tests

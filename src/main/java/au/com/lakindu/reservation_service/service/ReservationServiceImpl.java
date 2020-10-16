@@ -21,7 +21,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @AllArgsConstructor
-@Transactional
+@Transactional(timeout = 1000)
 public class ReservationServiceImpl implements ReservationService {
 
     ReservationRepository reservationRepository;
