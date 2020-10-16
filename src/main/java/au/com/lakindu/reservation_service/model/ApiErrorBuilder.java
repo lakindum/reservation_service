@@ -3,6 +3,7 @@ package au.com.lakindu.reservation_service.model;
 import au.com.lakindu.reservation_service.exception.ReservationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +30,8 @@ public class ApiErrorBuilder {
             return buildErrorDetails((MethodArgumentNotValidException) exception);
         } else if (exception instanceof ReservationException) {
             return buildErrorDetails((ReservationException) exception);
+        } else if (exception instanceof ConstraintViolationException) {
+            return buildErrorDetails((ConstraintViolationException) exception);
         }
         return buildErrorDetails(apiErrorStatus);
     }
@@ -49,5 +52,14 @@ public class ApiErrorBuilder {
             .field(constraintViolation.getField())
             .issue(constraintViolation.getDefaultMessage())
             .build()).collect(Collectors.toList());
+    }
+
+    private static List<ApiErrorDetails> buildErrorDetails(ConstraintViolationException exception) {
+        return exception.getConstraintViolations().stream()
+            .map(constraintViolation -> ApiErrorDetails.builder()
+                .field(constraintViolation.getPropertyPath().toString())
+                .value(constraintViolation.getInvalidValue().toString())
+                .issue(constraintViolation.getMessage())
+                .build()).collect(Collectors.toList());
     }
 }

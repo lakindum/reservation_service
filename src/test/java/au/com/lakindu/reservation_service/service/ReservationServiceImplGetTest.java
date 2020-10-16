@@ -108,7 +108,7 @@ class ReservationServiceImplGetTest {
         when(restaurantTableRepository.findAll()).thenReturn(getValidRestaurantTables());
         when(timeslotRepository.findAll()).thenReturn(getValidTimeslots());
 
-        when(availabilityMapper.mapTimeslot(anyString(), any(), any(), anyList())).thenCallRealMethod();
+        when(availabilityMapper.mapAvailabilities(anyString(), any(), any(), anyList())).thenCallRealMethod();
         List<Availability> availabilityList = reservationServiceImpl.getAvailability("2020-10-01");
 
         assertNotNull(availabilityList);
@@ -127,7 +127,7 @@ class ReservationServiceImplGetTest {
         when(restaurantTableRepository.findAll()).thenReturn(getValidRestaurantTables());
         when(timeslotRepository.findAll()).thenReturn(getValidTimeslots());
 
-        when(availabilityMapper.mapTimeslot(anyString(), any(), any(), anyList())).thenCallRealMethod();
+        when(availabilityMapper.mapAvailabilities(anyString(), any(), any(), anyList())).thenCallRealMethod();
         List<Availability> availabilityList = reservationServiceImpl.getAvailability("2020-10-01");
         assertNotNull(availabilityList);
         assertEquals(0, availabilityList.size());

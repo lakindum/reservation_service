@@ -34,7 +34,7 @@ public class ReservationServiceImpl implements ReservationService {
         List<Reservation> reservations = reservationRepository.findByReservationDate(date);
         Iterable<Timeslot> timeslots = timeslotRepository.findAll();
         Iterable<RestaurantTable> restaurantTables = restaurantTableRepository.findAll();
-        return availabilityMapper.mapTimeslot(date, restaurantTables, timeslots, reservations);
+        return availabilityMapper.mapAvailabilities(date, restaurantTables, timeslots, reservations);
     }
 
     public List<ReservationResponse> getReservations(String date) {
@@ -80,10 +80,9 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     public ReservationStatus deleteReservation(int id) {
-        if (!Optional.ofNullable(getReservation(id)).isPresent()) {
-            throw new ReservationException(ApiErrorStatus.NOT_FOUND);
+        if (Optional.ofNullable(getReservation(id)).isPresent()) {
+            reservationRepository.deleteById(id);
         }
-        reservationRepository.deleteById(id);
         return ReservationStatus.builder().id("0").status(Status.UNRESERVED).build();
     }
 

@@ -25,12 +25,12 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @GetMapping(path = "v1/availableSlots/{date}", produces = APPLICATION_JSON_VALUE)
-    public List<Availability> getAvailability(@PathVariable("date") final String date) {
+    public List<Availability> getAvailability(@PathVariable("date") @Pattern(regexp = RegexConstantsHelper.DATE) final String date) {
         return reservationService.getAvailability(date);
     }
 
     @GetMapping(path = "v1/reservations/{date}", produces = APPLICATION_JSON_VALUE)
-    public List<ReservationResponse> getReservations(@PathVariable("date") final String date) {
+    public List<ReservationResponse> getReservations(@PathVariable("date") @Pattern(regexp = RegexConstantsHelper.DATE) final String date) {
         return reservationService.getReservations(date);
     }
 
@@ -40,12 +40,12 @@ public class ReservationController {
     }
 
     @PostMapping(path = "v1/reservations", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ReservationStatus getReservation(@Valid @RequestBody @NotNull final ReservationRequest reservationRequest) {
+    public ReservationStatus addReservation(@Valid @RequestBody @NotNull final ReservationRequest reservationRequest) {
         return reservationService.addReservation(reservationRequest);
     }
 
     @PutMapping(path = "v1/reservations/{id}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ReservationStatus getReservation(@PathVariable("id") @Pattern(regexp = RegexConstantsHelper.RESERVATION_ID) final int id, @Valid @RequestBody @NotNull final ReservationRequest reservationRequest) {
+    public ReservationStatus getReservation(@PathVariable("id") final int id, @Valid @RequestBody @NotNull final ReservationRequest reservationRequest) {
         return reservationService.updateReservation(id, reservationRequest);
     }
 

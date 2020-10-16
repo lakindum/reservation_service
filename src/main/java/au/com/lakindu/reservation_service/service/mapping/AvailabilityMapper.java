@@ -12,8 +12,8 @@ import java.util.List;
 @Component
 public class AvailabilityMapper {
 
-    public List<Availability> mapTimeslot(String date, Iterable<RestaurantTable> restaurantTables,
-                                          Iterable<Timeslot> timeslots, List<Reservation> reservations) {
+    public List<Availability> mapAvailabilities(String date, Iterable<RestaurantTable> restaurantTables,
+                                                Iterable<Timeslot> timeslots, List<Reservation> reservations) {
         List<Availability> availabilities = new ArrayList<>();
         restaurantTables.forEach(restaurantTable -> {
             timeslots.forEach(timeslot -> {
