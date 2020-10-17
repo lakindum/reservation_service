@@ -1,0 +1,231 @@
+---
+swagger: "2.0"
+
+info:
+  title: "Reservation API"
+  description: "Api definition for Reservation API"
+  contact:
+    name: "Lakindu Manawasinghe"
+    email: "lakindum@gmail.com"
+  license:
+    name: "open-license"
+    url: "https://github.com/lakindum/reservation_service"
+  version: v1.0
+
+paths:
+  "/v1/reservations/{date}":
+    get:
+      summary: "Reservations on a date"
+      description: "Fetch reservations done on a given date"
+      parameters:
+        - $ref: '#/parameters/dateParam'
+      responses:
+        '200':
+          $ref: "#/responses/ReservationResponseList"
+        '400':
+          $ref: "#/responses/400ErrorResponse"
+        '404':
+          $ref: "#/responses/404ErrorResponse"
+        '500':
+          $ref: "#/responses/500ErrorResponse"
+  "/v1/reservation/{id}":
+    get:
+      summary: "Reservation by id"
+      description: "Fetch a specific reservation from its id"
+      parameters:
+        - $ref: '#/parameters/idParam'
+      responses:
+        '200':
+          $ref: "#/responses/ReservationResponse"
+        '400':
+          $ref: "#/responses/400ErrorResponse"
+        '404':
+          $ref: "#/responses/404ErrorResponse"
+        '500':
+          $ref: "#/responses/500ErrorResponse"
+  "/v1/reservations/{id}":
+    put:
+      summary: "Update an existing reservation"
+      description: "To update an existing reservation"
+      parameters:
+        - $ref: '#/parameters/idParam'
+        - $ref: '#/parameters/reservationRequestParam'
+      responses:
+        '200':
+          $ref: "#/responses/ReservationStatus"
+        '400':
+          $ref: "#/responses/400ErrorResponse"
+        '404':
+          $ref: "#/responses/404ErrorResponse"
+        '500':
+          $ref: "#/responses/500ErrorResponse"
+  "/v1/reservations/":
+    post:
+      summary: "Add a new reservation"
+      description: "To create a new reservation"
+      parameters:
+        - $ref: '#/parameters/reservationRequestParam'
+      responses:
+        '200':
+          $ref: "#/responses/ReservationStatus"
+        '400':
+          $ref: "#/responses/400ErrorResponse"
+        '404':
+          $ref: "#/responses/404ErrorResponse"
+        '500':
+          $ref: "#/responses/500ErrorResponse"
+    delete:
+      summary: "Delete an existing reservation"
+      description: "To delete an existing reservation"
+      parameters:
+        - $ref: '#/parameters/idParam'
+      responses:
+        '200':
+          $ref: "#/responses/ReservationStatus"
+        '400':
+          $ref: "#/responses/400ErrorResponse"
+        '404':
+          $ref: "#/responses/404ErrorResponse"
+        '500':
+          $ref: "#/responses/500ErrorResponse"
+parameters:
+  dateParam:
+    name: "date"
+    in: path
+    description: "Date in format yyyy-mm-dd"
+    required: true
+    type: string
+    pattern: "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$"
+  idParam:
+    name: "id"
+    in: path
+    description: "a unique id"
+    required: true
+    type: integer
+  reservationRequestParam:
+    name: "ReservationRequest"
+    in: body
+    description: "Reservation requests to add or update"
+    required: true
+    schema:
+      $ref: "#/definitions/ReservationRequest"
+responses:
+  ReservationResponseList:
+    description: "List of reservations for a given date"
+    schema:
+      $ref: "#/definitions/ReservationResponseList"
+  ReservationResponse:
+    description: "List of reservations for a given date"
+    schema:
+      $ref: "#/definitions/ReservationResponse"
+  ReservationStatus:
+    description: "Reservation status for adding/editing and deleting reservations"
+    schema:
+      $ref: "#/definitions/ReservationStatus"
+  400ErrorResponse:
+    description: "Bad Request"
+    schema:
+      $ref: "#/definitions/ApiError"
+  404ErrorResponse:
+    description: "Not Found"
+    schema:
+      $ref: "#/definitions/ApiError"
+  500ErrorResponse:
+    description: "Internal Server Error"
+    schema:
+      $ref: "#/definitions/ApiError"
+definitions:
+  ReservationRequest:
+    description: "Request to add/update reservations"
+    type: object
+    properties:
+      name:
+        type: string
+        minLength: 1
+        maxLength: 50
+      contact:
+        type: string
+        minLength: 1
+        maxLength: 20
+      reservationDate:
+        type: string
+        pattern: "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$"
+      reservationTime:
+        type: string
+        pattern: "^[0-9]{1,2}([AP][M])-[0-9]{1,2}([AP][M])$"
+      tableName:
+        type: string
+        minLength: 1
+        maxLength: 50
+    additionalProperties: false
+  ReservationResponseList:
+    description: "List of reservations for a given date"
+    type: array
+    items:
+      $ref: "#/definitions/ReservationResponse"
+  ReservationResponse:
+    description: "Response for add/update reservations"
+    type: object
+    properties:
+      id:
+        type: integer
+        minLength: 1
+        maxLength: 10
+      name:
+        type: string
+        minLength: 1
+        maxLength: 50
+      contact:
+        type: string
+        minLength: 1
+        maxLength: 20
+      reservationDate:
+        type: string
+        pattern: "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$"
+      reservationTime:
+        type: string
+        pattern: "^[0-9]{1,2}([AP][M])-[0-9]{1,2}([AP][M])$"
+      tableName:
+        type: string
+        minLength: 1
+        maxLength: 50
+    additionalProperties: false
+  ReservationStatus:
+    description: "Response for add/update reservations"
+    type: object
+    properties:
+      id:
+        type: string
+        minLength: 1
+        maxLength: 1
+      status:
+        type: string
+        enum:
+          - BOOKED
+          - UNAVAILABLE
+          - UNRESERVED
+    additionalProperties: false
+  ApiError:
+    description: "Structure for Api errors"
+    type: object
+    properties:
+      erroId:
+        type: string
+      message:
+        type: string
+      details:
+        type: array
+        description: "Additional details of the error"
+        items:
+          $ref: "#/definitions/ErrorDetails"
+  ErrorDetails:
+    properties:
+      field:
+        type: string
+        description: "The field that caused the error"
+      value:
+        type: string
+        description: "value of the field that caused the error"
+      issue:
+        type: string
+        description: "reason for the error"

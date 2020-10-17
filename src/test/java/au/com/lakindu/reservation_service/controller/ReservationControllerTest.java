@@ -69,6 +69,18 @@ class ReservationControllerTest {
     }
 
     @Test
+    public void test_get_reservation_by_id_invalid_reservation_request_should_fail() {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
+                baseUrl + "v1/reservation/XYZ").accept(
+                MediaType.APPLICATION_JSON);
+        try {
+            this.mockMvc.perform(requestBuilder).andExpect(status().isBadRequest());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void test_get_availability_valid_date_should_pass() {
         when(reservationService.getReservations(anyString())).thenReturn(getValidReservationResponseList());
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
@@ -185,12 +197,6 @@ class ReservationControllerTest {
         reservationResponses.add(reservationResponse1);
         reservationResponses.add(reservationResponse2);
         return reservationResponses;
-    }
-
-    private ReservationResponse getValidReservationResponse() {
-        return ReservationResponse.builder().id("1").name("Lakindu").contact("0430321394")
-            .reservationDate("2020-10-01").reservationTime("3PM-5PM").tableName("Table1")
-            .build();
     }
 
     private String getReservationRequest(String name, String contact,
