@@ -134,6 +134,20 @@ class ReservationControllerTest {
     }
 
     @Test
+    public void test_add_reservation_invalid_contact_length_should_fail() {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post(baseUrl + "v1/reservations/")
+                .content(getReservationRequest("Lakindu", "123456789012345678901", "2020-10-801",
+                        "3PM-5PMA", "Table2"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+        try {
+            this.mockMvc.perform(requestBuilder).andExpect(status().isBadRequest());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void test_update_reservation_valid_request_booking_successful_should_pass() {
         when(reservationService.updateReservation(anyInt(), any())).thenReturn(ReservationStatus.builder().id("1").status(Status.BOOKED).build());
         RequestBuilder requestBuilder = MockMvcRequestBuilders.put(baseUrl + "v1/reservations/1")
