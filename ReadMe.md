@@ -3,8 +3,8 @@
 ### Starting the service
 * ./gradlew bootRun will start the service with the in memory H2 database with some pre-populated data.
 
-### Postman Collection
-* I have added a postman collection with some tests to the root of the project.
+### Swagger
+* You can find the service contract in swagger here, https://github.com/lakindum/reservation_service/blob/master/src/main/java/au/com/lakindu/reservation_service/api/reservation-service.swagger.yaml
 
 ### Postman Collection
 * I have added a postman collection with some tests to the root of the project.
