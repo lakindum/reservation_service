@@ -71,9 +71,13 @@ class ReservationServiceImplGetTest {
         when(reservationRepository.findByReservationDate(any())).thenReturn(getEmptyReservations());
         when(reservationMapper.getReservationResponseList(getValidReservations())).thenCallRealMethod();
         when(reservationMapper.getReservationResponse(any())).thenCallRealMethod();
-        List<ReservationResponse> reservationResponseList = reservationServiceImpl.getReservations("2020-10-01");
-        assertNotNull(reservationResponseList);
-        assertEquals(0, reservationResponseList.size());
+        ReservationException thrown = assertThrows(
+                ReservationException.class,
+                () -> reservationServiceImpl.getReservations("2020-10-01"),
+                "Expected getReservations(\"2020-10-01\") to throw a ReservationException, but it didn't"
+        );
+        assertEquals(thrown.getApiErrorStatus().getHttpStatus().value(), HttpStatus.NOT_FOUND.value());
+        assertTrue(thrown.getMessage().contains("No reservations found for the given date"));
     }
 
     @Test
@@ -126,11 +130,14 @@ class ReservationServiceImplGetTest {
         when(reservationRepository.findByReservationDate(anyString())).thenReturn(getReservationsFullForDay("2020-10-01"));
         when(restaurantTableRepository.findAll()).thenReturn(getValidRestaurantTables());
         when(timeslotRepository.findAll()).thenReturn(getValidTimeslots());
-
         when(availabilityMapper.mapAvailabilities(anyString(), any(), any(), anyList())).thenCallRealMethod();
-        List<Availability> availabilityList = reservationServiceImpl.getAvailability("2020-10-01");
-        assertNotNull(availabilityList);
-        assertEquals(0, availabilityList.size());
+        ReservationException thrown = assertThrows(
+                ReservationException.class,
+                () -> reservationServiceImpl.getAvailability("2020-10-01"),
+                "Expected getAvailability(\"2020-10-01\") to throw a ReservationException, but it didn't"
+        );
+        assertEquals(thrown.getApiErrorStatus().getHttpStatus().value(), HttpStatus.NOT_FOUND.value());
+        assertTrue(thrown.getMessage().contains("No timeslots are available for the given date"));
     }
 
     private List<Reservation> getValidReservations() {

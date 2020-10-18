@@ -40,12 +40,12 @@ public class ReservationController {
     }
 
     @PostMapping(path = "v1/reservations", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ReservationStatus addReservation(@Valid @RequestBody @NotNull final ReservationRequest reservationRequest) {
+    public synchronized ReservationStatus addReservation(@Valid @RequestBody @NotNull final ReservationRequest reservationRequest) {
         return reservationService.addReservation(reservationRequest);
     }
 
     @PutMapping(path = "v1/reservations/{id}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ReservationStatus getReservation(@PathVariable("id") final int id, @Valid @RequestBody @NotNull final ReservationRequest reservationRequest) {
+    public synchronized ReservationStatus getReservation(@PathVariable("id") final int id, @Valid @RequestBody @NotNull final ReservationRequest reservationRequest) {
         return reservationService.updateReservation(id, reservationRequest);
     }
 

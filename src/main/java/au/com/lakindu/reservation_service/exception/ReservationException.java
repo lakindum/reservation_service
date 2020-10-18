@@ -10,10 +10,6 @@ public class ReservationException extends RuntimeException {
     @Getter
     private final ApiErrorStatus apiErrorStatus;
 
-    public ReservationException(ApiErrorStatus apiErrorStatus) {
-        this.apiErrorStatus = apiErrorStatus;
-    }
-
     public ReservationException(String message, ApiErrorStatus apiErrorStatus) {
         super(message);
         this.apiErrorStatus = apiErrorStatus;

@@ -34,11 +34,18 @@ public class ReservationServiceImpl implements ReservationService {
         List<Reservation> reservations = reservationRepository.findByReservationDate(date);
         Iterable<Timeslot> timeslots = timeslotRepository.findAll();
         Iterable<RestaurantTable> restaurantTables = restaurantTableRepository.findAll();
-        return availabilityMapper.mapAvailabilities(date, restaurantTables, timeslots, reservations);
+        List<Availability> availabilities = availabilityMapper.mapAvailabilities(date, restaurantTables, timeslots, reservations);
+        if (availabilities.isEmpty()) {
+            throw new ReservationException("No timeslots are available for the given date", ApiErrorStatus.NOT_FOUND);
+        }
+        return availabilities;
     }
 
     public List<ReservationResponse> getReservations(String date) {
         List<Reservation> reservations = reservationRepository.findByReservationDate(date);
+        if (reservations.isEmpty()) {
+            throw new ReservationException("No reservations found for the given date", ApiErrorStatus.NOT_FOUND);
+        }
         return reservationMapper.getReservationResponseList(reservations);
     }
 

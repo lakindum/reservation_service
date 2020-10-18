@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleReservationException(ReservationException exception,
                                                                HttpServletRequest request) {
         log.error("message=\"ReservationException in reservation api\", exception=", exception);
-        return new ResponseEntity<>(ApiErrorBuilder.build(exception), ApiErrorStatus.BAD_REQUEST.getHttpStatus());
+        return new ResponseEntity<>(ApiErrorBuilder.build(exception), exception.getApiErrorStatus().getHttpStatus());
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
